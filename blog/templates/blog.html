@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<div class="container">
+  <div class="row">
+    <!-- Latest Posts -->
+    <main class="posts-listing col-lg-8"> 
+      <div class="container">
+        <div class="row">
+          <!-- post -->
+          {% for blog in blogs %}
+          <div class="post col-xl-6"> 
+            
+            <div class="post-thumbnail"><a href="{{blog.get_absolute_url}}"><img src="{{blog.thumbnail.url}}" alt="..." class="img-fluid"></a></div>
+            <div class="post-details">
+              <div class="post-meta d-flex justify-content-between">
+                <div class="date meta-last"></div>
+                <div class="category">
+                  {% for cat in blog.categories.all %}
+                  <a href="{{blog.get_absolute_url}}">{{cat}}</a>
+                  {% endfor %}
+                </div>
+                
+              </div><a href="{{blog.get_absolute_url}}">
+                <h3 class="h4">{{blog.title}}</h3></a>
+              <p class="text-muted">{{blog.overview}}</p>
+              <footer class="post-footer d-flex align-items-center"><a href="#" class="author d-flex align-items-center flex-wrap">
+                  <div class="avatar"><img src="{{blog.author.profile_pic.url}}" alt="..." class="img-fluid"></div>
+                  <div class="title"><span>{{blog.author.user.username}}</span></div></a>
+                <div class="date"><i class="icon-clock"></i> {{blog.timestamp|timesince}} ago</div>
+                <div class="comments meta-last"><i class="icon-comment"></i>{{blog.comments.count}}</div>
+              </footer>
+            </div>
+            
+          </div>
+          {% endfor %}
+        </div>
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination pagination-template d-flex justify-content-center">
+            {% if blogs.has_previous %}
+            <li class="page-item"><a href="?{{ page_request_var }}={{ blogs.previous_page_number }}" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
+            {% endif %}
+            {% for i in blogs.paginator.page_range %}
+            {% if blogs.number == i %}
+            <li class="active"><span>{{i}}<span class="sr-only">(current)</span></span></li>
+            {% else %}
+            <li><a href="?{{ page_request_var }}={{i}}" class="page-link active">{{i}}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if blogs.has_next %}
+            <li class="page-item"><a href="?{{ page_request_var }}={{ blogs.next_page_number }}" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </main>
+
+    {% include 'sidebar.html' with latest=latest category_count=category_count %}
+  </div>
+</div>
+
+{% endblock body %}
+    

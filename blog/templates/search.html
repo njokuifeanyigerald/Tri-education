@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<div class="container text-center">
+    <h2 class="mt6">this are the results of your search</h2>
+    {% if qs %}
+    {% for result in qs %}
+    <ul class="list-group"> 
+        <li class="list-group-item">
+            <a href="{{result.get_absolute_url}}">{{ result.title }}</a>
+        </li>
+    {% endfor %}
+    {% else %}
+        <li class="list-group-item">
+            <p>search does not exist</p>
+        </li>
+    {% endif %}
+    </ul>
+    
+</div>
+
+{% endblock body %}
